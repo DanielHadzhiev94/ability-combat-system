@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "CombatSystem/Components/UAbilityComponent.h"
 #include "AbilityCombatSystemCharacter.generated.h"
 
 class USpringArmComponent;
@@ -30,9 +31,8 @@ class AAbilityCombatSystemCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
-	
-protected:
 
+protected:
 	/** Jump Input Action */
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* JumpAction;
@@ -49,26 +49,33 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* MouseLookAction;
 
-public:
+	/** First test ability activated with key 1*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputAction* IA_Ability;
 
+public:
 	/** Constructor */
-	AAbilityCombatSystemCharacter();	
+	AAbilityCombatSystemCharacter();
 
 protected:
-
 	/** Initialize input action bindings */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
-
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
-public:
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Abilities")
+	UAbilityComponent* AbilityComponent;
 
+public:
+	void ActivateAbility();
+
+public:
 	/** Handles move inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoMove(float Right, float Forward);
@@ -86,11 +93,9 @@ public:
 	virtual void DoJumpEnd();
 
 public:
-
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 };
-

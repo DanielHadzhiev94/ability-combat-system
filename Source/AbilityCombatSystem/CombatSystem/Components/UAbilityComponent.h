@@ -19,12 +19,14 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	
+	virtual void TickComponent(float DeltaTime,
+	                           enum ELevelTick TickType,
+	                           FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
 	UPROPERTY()
 	TArray<TObjectPtr<UAbilityBase>> GrantedAbilities;
-	
+
 	UPROPERTY(EditDefaultsOnly, Category="Abilities")
 	TArray<TSubclassOf<UAbilityBase>> DefaultAbilities;
 };

@@ -13,10 +13,26 @@ UAbilityComponent::UAbilityComponent()
 void UAbilityComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	for (TSubclassOf<UAbilityBase> AbilityClass : DefaultAbilities)
 	{
 		GrantAbility(AbilityClass);
+	}
+}
+
+void UAbilityComponent::TickComponent(float DeltaTime, enum ELevelTick TickType,
+                                      FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	for (UAbilityBase* Ability : GrantedAbilities)
+	{
+		if (!Ability)
+		{
+			continue;
+		}
+
+		Ability->UpdateCooldown(DeltaTime);
 	}
 }
 
@@ -70,4 +86,5 @@ void UAbilityComponent::TryActivateAbilityByIndex(const int32 AbilityIndex)
 	}
 
 	Ability->Activate(OwnerActor);
+	Ability->FinishAbility();
 }

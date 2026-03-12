@@ -71,12 +71,6 @@ void UAbilityComponent::TryActivateAbilityByIndex(const int32 AbilityIndex)
 		return;
 	}
 
-	if (!Ability->CanActivate())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("TryActivateAbilityByIndex failed: Ability cannot activate."));
-		return;
-	}
-
 	AActor* OwnerActor = GetOwner();
 
 	if (!OwnerActor)
@@ -85,6 +79,8 @@ void UAbilityComponent::TryActivateAbilityByIndex(const int32 AbilityIndex)
 		return;
 	}
 
-	Ability->Activate(OwnerActor);
-	Ability->FinishAbility();
+	if (!Ability->TryActivate(OwnerActor))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("TryActivateAbilityByIndex failed: Ability could not activate."));
+	}
 }

@@ -21,12 +21,14 @@ class ABILITYCOMBATSYSTEM_API UAbilityBase : public UObject
 
 public:
 	UAbilityBase();
+	
+	bool TryActivate(AActor* InstigatorActor);
 
-	UFUNCTION(BluePrintNativeEvent)
-	void Activate(AActor* InstigatorActor);
-
-	UFUNCTION(BluePrintNativeEvent)
+	UFUNCTION(BlueprintNativeEvent)
 	bool CanActivate() const;
+	
+	UFUNCTION(BlueprintNativeEvent)
+	void ExecuteAbility(AActor* InstigatorActor);
 
 	UFUNCTION()
 	void FinishAbility();

@@ -10,6 +10,7 @@ UAbilityComponent::UAbilityComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
+
 void UAbilityComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -45,13 +46,20 @@ void UAbilityComponent::GrantAbility(TSubclassOf<UAbilityBase> AbilityClass)
 	}
 
 	UAbilityBase* NewAbility = NewObject<UAbilityBase>(this, AbilityClass);
-
 	if (!NewAbility)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("GrantAbility failed: Could not create ability instance."));
 		return;
 	}
 
+	AActor* OwnerActor = GetOwner();
+	if (!OwnerActor)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GrantAbility failed: OwnerActor is null."));
+		return;
+	}
+
+	NewAbility->InitializeAbility(OwnerActor, this);
 	GrantedAbilities.Add(NewAbility);
 }
 
@@ -64,7 +72,6 @@ void UAbilityComponent::TryActivateAbilityByIndex(const int32 AbilityIndex)
 	}
 
 	UAbilityBase* Ability = GrantedAbilities[AbilityIndex];
-
 	if (!Ability)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("TryActivateAbilityByIndex failed: Ability at index %d is null"), AbilityIndex);
@@ -72,14 +79,13 @@ void UAbilityComponent::TryActivateAbilityByIndex(const int32 AbilityIndex)
 	}
 
 	AActor* OwnerActor = GetOwner();
-
-	if (!OwnerActor)
+		if (!OwnerActor)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("TryActivateAbilityByIndex failed: Owner is null."));
 		return;
 	}
 
-	if (!Ability->TryActivate(OwnerActor))
+	if (!Ability->TryActivate())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("TryActivateAbilityByIndex failed: Ability could not activate."));
 	}

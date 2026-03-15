@@ -6,15 +6,29 @@ UAbilityBase::UAbilityBase()
 	AbilityName = TEXT("BasicAbility");
 }
 
-bool UAbilityBase::TryActivate(AActor* InstigatorActor)
+void UAbilityBase::InitializeAbility(AActor* InstigatorActor, UAbilityComponent* AbilityComponent)
+{
+	if (Initialized)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Ability %s is already initialized"), *AbilityName.ToString());
+		return;
+	}
+
+	OwnerActor = InstigatorActor;
+	OwnerAbilityComponent = AbilityComponent;
+	Initialized = true;
+}
+
+bool UAbilityBase::TryActivate()
 {
 	if (AbilityState != EAbilityState::Ready)
 	{
 		return false;
 	}
 
-	if (!InstigatorActor)
+	if (!OwnerActor)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Ability %s does not have owner"), *AbilityName.ToString());
 		return false;
 	}
 
@@ -25,9 +39,9 @@ bool UAbilityBase::TryActivate(AActor* InstigatorActor)
 
 	// Ability is activated, so set the Active State.
 	AbilityState = EAbilityState::Active;
-	ExecuteAbility(InstigatorActor);
+	ExecuteAbility();
 
-	UE_LOG(LogTemp, Log, TEXT("Ability %s is activated by %s"), *AbilityName.ToString(), *InstigatorActor->GetName());
+	UE_LOG(LogTemp, Log, TEXT("Ability %s is activated by %s"), *AbilityName.ToString(), *OwnerActor->GetName());
 
 	return true;
 }
@@ -37,7 +51,7 @@ bool UAbilityBase::CanActivate_Implementation() const
 	return AbilityState == EAbilityState::Ready;
 }
 
-void UAbilityBase::ExecuteAbility_Implementation(AActor* InstigatorActor)
+void UAbilityBase::ExecuteAbility_Implementation()
 {
 }
 
@@ -85,4 +99,14 @@ EAbilityState UAbilityBase::GetAbilityState() const
 float UAbilityBase::GetCooldownRemaining() const
 {
 	return CooldownRemaining;
+}
+
+AActor* UAbilityBase::GetOwnerActor() const
+{
+	return OwnerActor;
+}
+
+UAbilityComponent* UAbilityBase::GetOwnerAbilityComponent() const
+{
+	return OwnerAbilityComponent;
 }

@@ -5,6 +5,7 @@
 #include "UAbilityBase.generated.h"
 
 class AActor;
+class UAbilityComponent;
 
 UENUM(BlueprintType)
 enum class EAbilityState: uint8
@@ -21,12 +22,16 @@ class ABILITYCOMBATSYSTEM_API UAbilityBase : public UObject
 
 public:
 	UAbilityBase();
+	
+	void InitializeAbility(AActor* InstigatorActor, UAbilityComponent* AbilityComponent);
+	
+	bool TryActivate();
 
-	UFUNCTION(BluePrintNativeEvent)
-	void Activate(AActor* InstigatorActor);
-
-	UFUNCTION(BluePrintNativeEvent)
+	UFUNCTION(BlueprintNativeEvent)
 	bool CanActivate() const;
+	
+	UFUNCTION(BlueprintNativeEvent)
+	void ExecuteAbility();
 
 	UFUNCTION()
 	void FinishAbility();
@@ -39,8 +44,20 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Ability")
 	float GetCooldownRemaining() const;
-
+	
+	UFUNCTION(BlueprintCallable, Category="Ability")
+	AActor* GetOwnerActor() const;
+	
+	UFUNCTION(BlueprintCallable, Category="Ability")
+	UAbilityComponent* GetOwnerAbilityComponent() const;
+	
 protected:
+	UPROPERTY()
+	TObjectPtr<AActor> OwnerActor = nullptr;
+	
+	UPROPERTY()
+	TObjectPtr<UAbilityComponent> OwnerAbilityComponent = nullptr;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ability")
 	FName AbilityName;
 
@@ -55,4 +72,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ability")
 	float ManaCost = 0.f;
+	
+private:
+	bool Initialized;
 };

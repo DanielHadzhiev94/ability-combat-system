@@ -74,7 +74,7 @@ void AAbilityCombatSystemCharacter::SetupPlayerInputComponent(UInputComponent* P
 
 		// First Ability
 		EnhancedInputComponent->BindAction(IA_Ability, ETriggerEvent::Triggered, this,
-		                                   &AAbilityCombatSystemCharacter::ActivateAbility());
+		                                   &AAbilityCombatSystemCharacter::ActivateAbility);
 	}
 	else
 	{

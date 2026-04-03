@@ -74,7 +74,7 @@ void AAbilityCombatSystemCharacter::SetupPlayerInputComponent(UInputComponent* P
 
 		// First Ability
 		EnhancedInputComponent->BindAction(IA_Ability, ETriggerEvent::Triggered, this,
-		                                   &AAbilityCombatSystemCharacter::ActivateAbility);
+		                                   &AAbilityCombatSystemCharacter::ActivateAbility());
 	}
 	else
 	{
@@ -143,6 +143,11 @@ void AAbilityCombatSystemCharacter::DoJumpEnd()
 {
 	// signal the character to stop jumping
 	StopJumping();
+}
+
+void AAbilityCombatSystemCharacter::ActivateAbility()
+{
+	ActivateAbility(0);
 }
 
 void AAbilityCombatSystemCharacter::ActivateAbility(int32 AbilityIndex)

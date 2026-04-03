@@ -71,6 +71,7 @@ protected:
 	UAbilityComponent* AbilityComponent;
 
 public:
+	void ActivateAbility();
 	void ActivateAbility(int32 AbilityIndex);
 
 	/** Handles move inputs from either controls or UI interfaces */

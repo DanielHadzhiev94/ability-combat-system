@@ -145,8 +145,10 @@ void AAbilityCombatSystemCharacter::DoJumpEnd()
 	StopJumping();
 }
 
-void AAbilityCombatSystemCharacter::ActivateAbility()
+void AAbilityCombatSystemCharacter::ActivateAbility(int32 AbilityIndex)
 {
 	if (AbilityComponent)
-		AbilityComponent->TryActivateAbility();
+	{
+		AbilityComponent->TryActivateAbilityByIndex(AbilityIndex);
+	}
 }

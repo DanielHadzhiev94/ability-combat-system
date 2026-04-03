@@ -61,21 +61,18 @@ protected:
 	/** Initialize input action bindings */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-
-protected:
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Abilities")
 	UAbilityComponent* AbilityComponent;
 
 public:
-	void ActivateAbility();
+	void ActivateAbility(int32 AbilityIndex);
 
-public:
 	/** Handles move inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoMove(float Right, float Forward);

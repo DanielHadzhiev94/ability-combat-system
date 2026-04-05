@@ -32,10 +32,10 @@ bool UAbilityBase::TryActivate()
 		return false;
 	}
 
-	if (!CanActivate())
-	{
-		return false;
-	}
+	// if (!CanActivate())
+	// {
+	// 	return false;
+	// }
 
 	// Ability is activated, so set the Active State.
 	AbilityState = EAbilityState::Active;

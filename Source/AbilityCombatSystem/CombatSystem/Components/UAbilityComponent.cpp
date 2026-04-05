@@ -61,6 +61,7 @@ void UAbilityComponent::GrantAbility(TSubclassOf<UAbilityBase> AbilityClass)
 
 	NewAbility->InitializeAbility(OwnerActor, this);
 	GrantedAbilities.Add(NewAbility);
+	UE_LOG(LogTemp, Log, TEXT("Added new ability %s") , *NewAbility->GetName());
 }
 
 void UAbilityComponent::TryActivateAbilityByIndex(const int32 AbilityIndex)

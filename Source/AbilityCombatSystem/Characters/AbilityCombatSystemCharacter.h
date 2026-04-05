@@ -50,9 +50,15 @@ protected:
 	UInputAction* MouseLookAction;
 
 	/** First test ability activated with key 1*/
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
-	UInputAction* IA_Ability;
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* IA_Ability1;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputAction* IA_Ability2;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputAction* IA_Ability3;
+	
 public:
 	/** Constructor */
 	AAbilityCombatSystemCharacter();
@@ -61,21 +67,27 @@ protected:
 	/** Initialize input action bindings */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-
-protected:
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Abilities")
 	UAbilityComponent* AbilityComponent;
 
 public:
-	void ActivateAbility();
-
-public:
+	UFUNCTION()
+	void ActivateAbilitySlot1();
+	
+	UFUNCTION()
+	void ActivateAbilitySlot2();
+	
+	UFUNCTION()
+	void ActivateAbilitySlot3();
+	
+	void ActivateAbility(int32 AbilityIndex);
+	
 	/** Handles move inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoMove(float Right, float Forward);

@@ -73,8 +73,14 @@ void AAbilityCombatSystemCharacter::SetupPlayerInputComponent(UInputComponent* P
 		                                   &AAbilityCombatSystemCharacter::Look);
 
 		// First Ability
-		EnhancedInputComponent->BindAction(IA_Ability, ETriggerEvent::Triggered, this,
-		                                   &AAbilityCombatSystemCharacter::ActivateAbility);
+		EnhancedInputComponent->BindAction(IA_Ability1, ETriggerEvent::Triggered, this,
+		                                   &AAbilityCombatSystemCharacter::ActivateAbilitySlot1);
+		
+		EnhancedInputComponent->BindAction(IA_Ability2, ETriggerEvent::Triggered, this,
+										   &AAbilityCombatSystemCharacter::ActivateAbilitySlot2);
+		
+		EnhancedInputComponent->BindAction(IA_Ability3, ETriggerEvent::Triggered, this,
+										   &AAbilityCombatSystemCharacter::ActivateAbilitySlot3);
 	}
 	else
 	{
@@ -145,8 +151,25 @@ void AAbilityCombatSystemCharacter::DoJumpEnd()
 	StopJumping();
 }
 
-void AAbilityCombatSystemCharacter::ActivateAbility()
+void AAbilityCombatSystemCharacter::ActivateAbilitySlot1()
+{
+	ActivateAbility(0);
+}
+
+void AAbilityCombatSystemCharacter::ActivateAbilitySlot2()
+{
+	ActivateAbility(1);
+}
+
+void AAbilityCombatSystemCharacter::ActivateAbilitySlot3()
+{
+	ActivateAbility(2);
+}
+
+void AAbilityCombatSystemCharacter::ActivateAbility(int32 AbilityIndex)
 {
 	if (AbilityComponent)
-		AbilityComponent->TryActivateAbility();
+	{
+		AbilityComponent->TryActivateAbilityByIndex(AbilityIndex);
+	}
 }

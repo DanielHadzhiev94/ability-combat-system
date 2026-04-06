@@ -37,15 +37,18 @@ void UHealthComponent::ApplyDamage(float DamageAmount)
 		UE_LOG(LogTemp, Warning, TEXT("DamageAmount is less or equals to 0"));
 		return;
 	}
-	
+
 	if (IsDead())
 	{
-		UE_LOG(LogTemp, Log, TEXT("Target has died."));
+		UE_LOG(LogTemp, Warning, TEXT("Target is already dead!"))
 		return;
 	}
-	
+
 	CurrentHealth = FMath::Clamp(CurrentHealth - DamageAmount, 0.f, MaxHealth);
-	UE_LOG(LogTemp, Log, TEXT("Target was damaged for %f amount. Current Health: %f"), DamageAmount, CurrentHealth);
+	if (IsDead())
+	{
+		OnDeath.Broadcast();
+	}
 }
 
 void UHealthComponent::Heal(float HealAmount)

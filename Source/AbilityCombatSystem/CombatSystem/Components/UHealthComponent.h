@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "UHealthComponent.generated.h"
 
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ABILITYCOMBATSYSTEM_API UHealthComponent : public UActorComponent
 {
@@ -15,6 +15,9 @@ class ABILITYCOMBATSYSTEM_API UHealthComponent : public UActorComponent
 public:
 	// Sets default values for this component's properties
 	UHealthComponent();
+	
+	UPROPERTY(BlueprintAssignable, Category="Health")
+	FOnDeath OnDeath;
 
 	void ApplyDamage(float DamageAmount);
 

@@ -12,6 +12,16 @@
 #include "InputActionValue.h"
 #include "AbilityCombatSystem.h"
 
+void AAbilityCombatSystemCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (CharacterHealthComponent)
+	{
+		CharacterHealthComponent->OnDeath.AddDynamic(this, &AAbilityCombatSystemCharacter::HandleDeath);
+	}
+}
+
 AAbilityCombatSystemCharacter::AAbilityCombatSystemCharacter()
 {
 	// Set size for collision capsule
@@ -49,6 +59,9 @@ AAbilityCombatSystemCharacter::AAbilityCombatSystemCharacter()
 	// Add the AbilityComponent
 	AbilityComponent = CreateDefaultSubobject<UAbilityComponent>(TEXT("AbilityComponent"));
 
+	// Add HealthComponent
+	CharacterHealthComponent = CreateDefaultSubobject<UCharacterHealthComponent>(TEXT("CharacterHealthComponent"));
+
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
@@ -75,12 +88,18 @@ void AAbilityCombatSystemCharacter::SetupPlayerInputComponent(UInputComponent* P
 		// First Ability
 		EnhancedInputComponent->BindAction(IA_Ability1, ETriggerEvent::Triggered, this,
 		                                   &AAbilityCombatSystemCharacter::ActivateAbilitySlot1);
-		
+
 		EnhancedInputComponent->BindAction(IA_Ability2, ETriggerEvent::Triggered, this,
-										   &AAbilityCombatSystemCharacter::ActivateAbilitySlot2);
-		
+		                                   &AAbilityCombatSystemCharacter::ActivateAbilitySlot2);
+
 		EnhancedInputComponent->BindAction(IA_Ability3, ETriggerEvent::Triggered, this,
-										   &AAbilityCombatSystemCharacter::ActivateAbilitySlot3);
+		                                   &AAbilityCombatSystemCharacter::ActivateAbilitySlot3);
+		// Debug Action
+		EnhancedInputComponent->BindAction(IA_DamageDebug, ETriggerEvent::Triggered, this,
+		                                   &AAbilityCombatSystemCharacter::DebugDamage);
+
+		EnhancedInputComponent->BindAction(IA_HealDebug, ETriggerEvent::Triggered, this,
+		                                   &AAbilityCombatSystemCharacter::DebugHeal);
 	}
 	else
 	{
@@ -151,6 +170,18 @@ void AAbilityCombatSystemCharacter::DoJumpEnd()
 	StopJumping();
 }
 
+void AAbilityCombatSystemCharacter::HandleDeath()
+{
+	UE_LOG(LogTemp, Log, TEXT("Character died."));
+
+	GetCharacterMovement()->DisableMovement();
+
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	{
+		DisableInput(PlayerController);
+	}
+}
+
 void AAbilityCombatSystemCharacter::ActivateAbilitySlot1()
 {
 	ActivateAbility(0);
@@ -164,6 +195,22 @@ void AAbilityCombatSystemCharacter::ActivateAbilitySlot2()
 void AAbilityCombatSystemCharacter::ActivateAbilitySlot3()
 {
 	ActivateAbility(2);
+}
+
+void AAbilityCombatSystemCharacter::DebugDamage()
+{
+	if (CharacterHealthComponent)
+	{
+		CharacterHealthComponent->ApplyDamage(50.f);
+	}
+}
+
+void AAbilityCombatSystemCharacter::DebugHeal()
+{
+	if (CharacterHealthComponent)
+	{
+		CharacterHealthComponent->Heal(50.f);
+	}
 }
 
 void AAbilityCombatSystemCharacter::ActivateAbility(int32 AbilityIndex)

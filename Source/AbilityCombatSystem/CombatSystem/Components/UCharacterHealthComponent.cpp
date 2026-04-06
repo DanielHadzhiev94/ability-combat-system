@@ -1,36 +1,39 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UHealthComponent.h"
-
+#include "CombatSystem/Components/UCharacterHealthComponent.h"
 
 // Sets default values for this component's properties
-UHealthComponent::UHealthComponent()
+UCharacterHealthComponent::UCharacterHealthComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
+
+	// ...
 }
 
 
 // Called when the game starts
-void UHealthComponent::BeginPlay()
+void UCharacterHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
 	// Initialize Health
 	CurrentHealth = MaxHealth;
+	
 }
 
 
 // Called every frame
-void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                     FActorComponentTickFunction* ThisTickFunction)
+void UCharacterHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	// ...
 }
 
-void UHealthComponent::ApplyDamage(float DamageAmount)
+void UCharacterHealthComponent::ApplyDamage(float DamageAmount)
 {
 	if (DamageAmount <= 0)
 	{
@@ -40,7 +43,7 @@ void UHealthComponent::ApplyDamage(float DamageAmount)
 
 	if (IsDead())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Target is already dead!"))
+		UE_LOG(LogTemp, Warning, TEXT("Target is already dead!"));
 		return;
 	}
 
@@ -51,7 +54,7 @@ void UHealthComponent::ApplyDamage(float DamageAmount)
 	}
 }
 
-void UHealthComponent::Heal(float HealAmount)
+void UCharacterHealthComponent::Heal(float HealAmount)
 {
 	if (HealAmount <= 0)
 	{
@@ -70,17 +73,17 @@ void UHealthComponent::Heal(float HealAmount)
 	UE_LOG(LogTemp, Log, TEXT("Target was healed for %f amount. Current Health: %f"), HealAmount, CurrentHealth);
 }
 
-float UHealthComponent::GetCurrentHealth() const
+float UCharacterHealthComponent::GetCurrentHealth() const
 {
 	return CurrentHealth;
 }
 
-float UHealthComponent::GetMaxHealth() const
+float UCharacterHealthComponent::GetMaxHealth() const
 {
 	return MaxHealth;
 }
 
-bool UHealthComponent::IsDead() const
+bool UCharacterHealthComponent::IsDead() const
 {
 	return CurrentHealth <= 0;
 }

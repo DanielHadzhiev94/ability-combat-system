@@ -1,20 +1,20 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "UHealthComponent.generated.h"
+#include "UCharacterHealthComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class ABILITYCOMBATSYSTEM_API UHealthComponent : public UActorComponent
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+class ABILITYCOMBATSYSTEM_API UCharacterHealthComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:
+public:	
 	// Sets default values for this component's properties
-	UHealthComponent();
+	UCharacterHealthComponent();
 	
 	UPROPERTY(BlueprintAssignable, Category="Health")
 	FOnDeath OnDeath;
@@ -35,15 +35,16 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Health")
 	float MaxHealth = 100.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Health")
 	float CurrentHealth = 0.f;
 
-public:
+public:	
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+		
 };

@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "CombatSystem/Components/UAbilityComponent.h"
+#include "CombatSystem/Components/UCharacterHealthComponent.h"
 #include "AbilityCombatSystemCharacter.generated.h"
 
 class USpringArmComponent;
@@ -33,6 +34,8 @@ class AAbilityCombatSystemCharacter : public ACharacter
 	UCameraComponent* FollowCamera;
 
 protected:
+	virtual void BeginPlay() override;
+
 	/** Jump Input Action */
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* JumpAction;
@@ -55,10 +58,16 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* IA_Ability2;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* IA_Ability3;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Debug")
+	UInputAction* IA_DamageDebug;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category ="Debug")
+	UInputAction* IA_HealDebug;
+
 public:
 	/** Constructor */
 	AAbilityCombatSystemCharacter();
@@ -72,22 +81,34 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Abilities")
-	UAbilityComponent* AbilityComponent;
+	TObjectPtr<UAbilityComponent> AbilityComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Abilities")
+	TObjectPtr<UCharacterHealthComponent> CharacterHealthComponent;
+
+	UFUNCTION()
+	void HandleDeath();
 
 public:
 	UFUNCTION()
 	void ActivateAbilitySlot1();
-	
+
 	UFUNCTION()
 	void ActivateAbilitySlot2();
-	
+
 	UFUNCTION()
 	void ActivateAbilitySlot3();
-	
+
+	UFUNCTION()
+	void DebugDamage();
+
+	UFUNCTION()
+	void DebugHeal();
+
 	void ActivateAbility(int32 AbilityIndex);
-	
+
 	/** Handles move inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoMove(float Right, float Forward);

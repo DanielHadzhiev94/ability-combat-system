@@ -20,7 +20,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="Health")
 	FOnDeath OnDeath;
 	
-	UPROPERTY(BlueprintAssignable, Category = "Heatlh")
+	UPROPERTY(BlueprintAssignable, Category = "Health")
 	FOnHealthChanged OnHealthChanged;
 	
 	void ApplyDamage(float DamageAmount);

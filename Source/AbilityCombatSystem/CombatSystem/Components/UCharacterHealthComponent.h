@@ -7,6 +7,7 @@
 #include "UCharacterHealthComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChanged, float, CurrentHealth, float, MaxHealth);
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ABILITYCOMBATSYSTEM_API UCharacterHealthComponent : public UActorComponent
 {
@@ -18,7 +19,10 @@ public:
 	
 	UPROPERTY(BlueprintAssignable, Category="Health")
 	FOnDeath OnDeath;
-
+	
+	UPROPERTY(BlueprintAssignable, Category = "Heatlh")
+	FOnHealthChanged OnHealthChanged;
+	
 	void ApplyDamage(float DamageAmount);
 
 	void Heal(float HealAmount);
@@ -46,5 +50,6 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	UFUNCTION(BlueprintCallable, Category="Health")
+	float GetHealthPercent() const;	
 };

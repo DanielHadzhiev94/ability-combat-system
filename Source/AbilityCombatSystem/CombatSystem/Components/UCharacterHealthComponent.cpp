@@ -21,12 +21,13 @@ void UCharacterHealthComponent::BeginPlay()
 
 	// Initialize Health
 	CurrentHealth = MaxHealth;
-	
+	OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
 }
 
 
 // Called every frame
-void UCharacterHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UCharacterHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType,
+                                              FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
@@ -48,6 +49,7 @@ void UCharacterHealthComponent::ApplyDamage(float DamageAmount)
 	}
 
 	CurrentHealth = FMath::Clamp(CurrentHealth - DamageAmount, 0.f, MaxHealth);
+	OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
 	if (IsDead())
 	{
 		OnDeath.Broadcast();
@@ -69,6 +71,7 @@ void UCharacterHealthComponent::Heal(float HealAmount)
 	}
 
 	CurrentHealth = FMath::Clamp(CurrentHealth + HealAmount, 0.f, MaxHealth);
+	OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
 
 	UE_LOG(LogTemp, Log, TEXT("Target was healed for %f amount. Current Health: %f"), HealAmount, CurrentHealth);
 }
@@ -86,4 +89,14 @@ float UCharacterHealthComponent::GetMaxHealth() const
 bool UCharacterHealthComponent::IsDead() const
 {
 	return CurrentHealth <= 0;
+}
+
+float UCharacterHealthComponent::GetHealthPercent() const
+{
+	if (MaxHealth <= 0.f)
+	{
+		return 0.f;
+	}
+
+	return CurrentHealth / MaxHealth;
 }
